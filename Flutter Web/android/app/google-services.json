@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "770365428478",
+    "project_id": "topicdetection-93c2e",
+    "storage_bucket": "topicdetection-93c2e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:770365428478:android:57454e6bf7293bab778baf",
+        "android_client_info": {
+          "package_name": "com.example.topicdetectionweb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBV-gPQcSE6_rAxYa4HdZP_Zn3bxQV-2f0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
