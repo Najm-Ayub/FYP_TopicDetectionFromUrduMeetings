@@ -1,7 +1,7 @@
 import requests
 import time
 
-url = "http://202.142.147.3:5005/ClE_ASR"
+url = "https://api.cle.org.pk/asr"
 file_name = 'aa.wav'
 file = {'file': (file_name, open(file_name, 'rb'), 'audio/wav')}
 
