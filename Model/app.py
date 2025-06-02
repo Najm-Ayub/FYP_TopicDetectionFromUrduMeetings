@@ -1,41 +1,58 @@
-
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from Urdu_main4 import TextTilingTokenizer
 
-app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+def create_app():
+    """
+    Factory function to create and configure the Flask application.
+    """
+    app = Flask(__name__)
+    CORS(app)  # Enable CORS for all routes
+
+    # Initialize tokenizer
+    tokenizer = TextTilingTokenizer()
+    text_tiling_api = TextTilingAPI(tokenizer)
+
+    @app.route('/api/tokenize', methods=['POST'])
+    def tokenize_text():
+        """
+        Endpoint to tokenize input text using the TextTiling algorithm.
+        Expects a POST request with 'text' as form data.
+        """
+        try:
+            text = request.form.get('text')
+
+            if not text:
+                return jsonify({'error': 'Missing or empty "text" parameter in request'}), 400
+
+            segments = text_tiling_api.process_text(text)
+            return jsonify({'segments': segments}), 200
+
+        except Exception as e:
+            return jsonify({'error': f'Internal Server Error: {str(e)}'}), 500
+
+    return app
+
 
 class TextTilingAPI:
+    """
+    A wrapper class to handle the text segmentation logic using TextTilingTokenizer.
+    """
+
     def __init__(self, tokenizer):
         self.tokenizer = tokenizer
 
-    def process_text(self, text):
-        segments = self.tokenizer.tokenize(text)
-        return segments
+    def process_text(self, text: str):
+        """
+        Tokenizes the input text into segments using the provided tokenizer.
 
-# Initialize the API with the TextTilingTokenizer
-text_tiling_api = TextTilingAPI(TextTilingTokenizer())
+        :param text: Input string to segment
+        :return: List of segmented strings
+        """
+        return self.tokenizer.tokenize(text)
 
-@app.route('/api/tokenize', methods=['POST'])
-def tokenize_text():
-    try:
-        # Check if the post request has the text part
-        if 'text' not in request.form:
-            return jsonify({'error': 'No text part or incorrect key name. Use "text" as the key in your request.'}), 400
-
-        text = request.form['text']
-
-        if not text:
-            return jsonify({'error': 'Empty text provided'}), 400
-
-        segments = text_tiling_api.process_text(text)
-        return jsonify({'segments': segments})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
 
 if __name__ == '__main__':
+    # Run the Flask development server
+    app = create_app()
     app.run(debug=True, use_reloader=False)
-
-
